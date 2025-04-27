@@ -993,6 +993,7 @@
 				"effectField": "مجال",
 				"effectFormAction": "فعل",
 				"effectTab": "فاتورة غير مدفوعة",
+				"ganttStepsWeeks": "weeks",
 				"ganttStepsDays": "أيام",
 				"ganttStepsHours": "ساعات",
 				"style": {

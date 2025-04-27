@@ -993,6 +993,7 @@
 				"effectField": "Mező",
 				"effectFormAction": "Action",
 				"effectTab": "Lap",
+				"ganttStepsWeeks": "Hetek",
 				"ganttStepsDays": "Napok",
 				"ganttStepsHours": "Órák",
 				"style": {

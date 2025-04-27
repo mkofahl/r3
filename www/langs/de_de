@@ -993,6 +993,7 @@
 				"effectField": "Feld",
 				"effectFormAction": "Aktion",
 				"effectTab": "Tab",
+				"ganttStepsWeeks": "Wochen",
 				"ganttStepsDays": "Tage",
 				"ganttStepsHours": "Stunden",
 				"style": {
@@ -1751,7 +1752,7 @@
 		"button": {
 			"ganttShowLabels": "Gruppen",
 			"ganttShowLabelsHint": "Gruppen anzeigen/verstecken",
-			"ganttToggleHint": "Zwischen Stunden- & Tagmodus wechseln",
+			"ganttToggleHint": "Zwischen Wochen-, Tag- & Stundenmodus wechseln",
 			"ics": "Zugriff",
 			"icsHint": "Auf Kalender von Extern zugreifen",
 			"icsPublish": "Für persönliche Nutzung veröffentlichen"

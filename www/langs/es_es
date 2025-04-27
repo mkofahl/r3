@@ -993,6 +993,7 @@
 				"effectField": "Field",
 				"effectFormAction": "Action",
 				"effectTab": "Tab",
+				"ganttStepsWeeks": "weeks",
 				"ganttStepsDays": "days",
 				"ganttStepsHours": "hours",
 				"style": {
@@ -1751,7 +1752,7 @@
 		"button": {
 			"ganttShowLabels": "Groups",
 			"ganttShowLabelsHint": "Show/hide groups",
-			"ganttToggleHint": "Toggle between day & hour mode",
+			"ganttToggleHint": "Toggle between week, day & hour mode",
 			"ics": "Access",
 			"icsHint": "Access calendar from external application",
 			"icsPublish": "Publish for personal use"

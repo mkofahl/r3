@@ -34,6 +34,43 @@ import {
 } from './shared/router.js';
 export {MyGantt as default};
 
+/**
+ * Returns the week number for this date.  dowOffset is the day of week the week
+ * "starts" on for your locale - it can be from 0 to 6. If dowOffset is 1 (Monday),
+ * the week returned is the ISO 8601 week number.
+ * @param int dowOffset
+ * @return int
+ *
+ * @source https://www.epoch-calendar.com/support/getting_iso_week.html
+ * @license You may copy and paste this code without charge. All we ask is you leave the credit line in the function body intact.
+ */
+Date.prototype.getWeek = function (dowOffset) {
+/*getWeek() was developed by Nick Baicoianu at MeanFreePath: http://www.epoch-calendar.com */
+
+	dowOffset = typeof(dowOffset) == 'int' ? dowOffset : 0; //default dowOffset to zero
+	let newYear = new Date(this.getFullYear(),0,1);
+	let day = newYear.getDay() - dowOffset; //the day of week the year begins on
+	day = (day >= 0 ? day : day + 7);
+	let daynum = Math.floor((this.getTime() - newYear.getTime() - (this.getTimezoneOffset()-newYear.getTimezoneOffset())*60000)/86400000) + 1;
+	let weeknum;
+	//if the year starts before the middle of a week
+	if(day < 4) {
+		weeknum = Math.floor((daynum+day-1)/7) + 1;
+		if(weeknum > 52) {
+			let nYear = new Date(this.getFullYear() + 1,0,1);
+			let nday = nYear.getDay() - dowOffset;
+			nday = nday >= 0 ? nday : nday + 7;
+			/*if the next year starts before the middle of
+			  the week, it is week #1 of that year*/
+			weeknum = nday < 4 ? 1 : 53;
+		}
+	}
+	else {
+		weeknum = Math.floor((daynum+day-1)/7);
+	}
+	return weeknum;
+};
+
 let MyGanttLineRecord = {
 	name:'my-gantt-line-record',
 	components:{MyValueRich},
@@ -105,7 +142,7 @@ let MyGanttLineRecord = {
 			let secWidth  = (d1 - d0) / 1000;
 			
 			// correction for DST change in day mode
-			if(this.isDays) {
+			if(this.isDays || this.isWeeks) {
 				let secDst0 = this.date0Range.getTimezoneOffset()*60;
 				let secDst1 = d0.getTimezoneOffset()*60;
 				secOffset += secDst0 - secDst1;
@@ -232,7 +269,7 @@ let MyGantt = {
 					v-if="!isMobile && stepTypeToggle"
 					@trigger="toggleStepType"
 					:captionTitle="capApp.button.ganttToggleHint"
-					:image="isDays ? 'clock.png' : 'clock24.png'"
+					:image="isDays ? 'calendarWeeks.png' : (isWeeks ? 'clock.png' : 'clock24.png')"
 					:naked="true"
 				/>
 				
@@ -308,7 +345,7 @@ let MyGantt = {
 				<div class="gantt-lines" ref="content">
 					<div class="gantt-headers">
 						
-						<!-- header meta line: shows groupings of step entities (hours->days, days->months) -->
+						<!-- header meta line: shows groupings of step entities (hours->days, days->months, weeks->years) -->
 						<div class="gantt-header">
 							<div class="gantt-header-item"
 								v-for="i in headerItemsMeta"
@@ -418,7 +455,7 @@ let MyGantt = {
 			showGroupLabels:true,
 			startDate:0,            // start date (TZ), base for date ranges, set once to keep navigation clear
 			stepBase:8,             // base size of step width in pixels, used to multiply with zoom factor
-			stepType:'days',        // gantt step type (hours, days)
+			stepType:'days',        // gantt step type (hours, days, weeks)
 			stepZoom:7,             // zoom factor for step, 7 is default (7*8=56)
 			stepZoomDefault:7,      // zoom reset to
 			steps:0,                // available steps, calculated based on field size and zoom factor
@@ -434,6 +471,7 @@ let MyGantt = {
 			let d = new Date(s.dateStart.getTime());
 			// start 3 steps before page start point
 			switch(s.stepType) {
+				case 'weeks': d.setDate(d.getDate()   - 3 + (s.page*7*s.steps)); break;
 				case 'days':  d.setDate(d.getDate()   - 3 + (s.page*s.steps)); break;
 				case 'hours': d.setHours(d.getHours() - 3 + (s.page*s.steps)); break;
 			}
@@ -442,6 +480,7 @@ let MyGantt = {
 		date1:(s) => {
 			let d = new Date(s.dateStart.getTime());
 			switch(s.stepType) {
+				case 'weeks': d.setDate(d.getDate()   + 7*s.steps - 3 + (s.page*7*s.steps)); break;
 				case 'days':  d.setDate(d.getDate()   + s.steps - 3 + (s.page*s.steps)); break;
 				case 'hours': d.setHours(d.getHours() + s.steps - 3 + (s.page*s.steps)); break;
 			}
@@ -452,6 +491,9 @@ let MyGantt = {
 			let d0 = new Date(s.date0.getTime());
 			let d1 = new Date(s.date1.getTime());
 			let format = s.isDays ? s.settings.dateFormat : s.settings.dateFormat+' H:i';
+			if(s.isWeeks) {
+				return d0.getWeek() + '/' + d0.getFullYear() + ' - ' + d1.getWeek() + '/' + d1.getFullYear();
+			}
 			if(s.isDays) {
 				d1.setDate(d1.getDate()-1);
 				return s.isMobile ? s.getDateFormat(d0,format)
@@ -495,6 +537,7 @@ let MyGantt = {
 		pxPerSec:(s) => {
 			if     (s.isHours) return s.stepPixels / 3600;
 			else if(s.isDays)  return s.stepPixels / 86400;
+			else if(s.isWeeks) return s.stepPixels / 604800;
 			return 0.0;
 		},
 		styleLine:(s) => {
@@ -514,6 +557,7 @@ let MyGantt = {
 		isDays:         (s) => s.stepType === 'days',
 		isEmpty:        (s) => s.groups.length === 0,
 		isHours:        (s) => s.stepType === 'hours',
+		isWeeks:        (s) => s.stepType === 'weeks',
 		joins:          (s) => s.fillRelationRecordIds(s.query.joins),
 		stepPixels:     (s) => s.stepBase * s.stepZoom,
 		styleHeaderItem:(s) => `width:${s.stepPixels}px;`,
@@ -611,12 +655,13 @@ let MyGantt = {
 			};
 			let add = function(d) {
 				let caption;
+				if(that.isWeeks) caption = d.getWeek();
 				if(that.isHours) caption = d.getHours();
 				if(that.isDays)  caption = `${d.getDate()}.`;
 				
 				that.headerItems.push({
 					caption:caption,
-					isWeekend:d.getDay() === 0 || d.getDay() === 6,
+					isWeekend:(that.isHours || that.isDays) && (d.getDay() === 0 || d.getDay() === 6),
 					unixTime:that.getUnixFromDate(d)
 				});
 			};
@@ -629,14 +674,26 @@ let MyGantt = {
 				stepsTaken++;
 				add(d);
 				
+				if(this.isWeeks) {
+					d.setDate(d.getDate()+7);
+
+					// next year meta item
+					if(d.getWeek() === 1) {
+						let dCopy = new Date(d.getTime());
+						dCopy.setDate(dCopy.getDate() - 7);
+
+						addMeta(stepsTaken,dCopy.getFullYear());
+						stepsTaken = 0;
+					}
+				}
 				if(this.isDays) {
 					d.setDate(d.getDate()+1);
-					
+
 					// next month meta item
 					if(d.getDate() === 1) {
 						let dCopy = new Date(d.getTime());
 						dCopy.setDate(dCopy.getDate() - 1);
-						
+
 						addMeta(stepsTaken,dCopy.getMonth());
 						stepsTaken = 0;
 					}
@@ -658,6 +715,7 @@ let MyGantt = {
 			// add last meta header item
 			if(stepsTaken !== 0) {
 				switch(this.stepType) {
+					case 'weeks': addMeta(stepsTaken,d.getFullYear());  break;
 					case 'hours': addMeta(stepsTaken,d.getDate());  break;
 					case 'days':  addMeta(stepsTaken,d.getMonth()); break;
 				}
@@ -682,8 +740,8 @@ let MyGantt = {
 			
 			if(this.unixInput0 !== null && this.unixInput1 !== null) {
 				let attributes = [
-					`${this.attributeIdDate0}_${this.isDays ? this.getUnixShifted(this.unixInput0,false) : this.unixInput0}`,
-					`${this.attributeIdDate1}_${this.isDays ? this.getUnixShifted(this.unixInput1,false) : this.unixInput1}`
+					`${this.attributeIdDate0}_${this.isDays || this.isWeeks ? this.getUnixShifted(this.unixInput0,false) : this.unixInput0}`,
+					`${this.attributeIdDate1}_${this.isDays || this.isWeeks ? this.getUnixShifted(this.unixInput1,false) : this.unixInput1}`
 				];
 				this.$emit('open-form',[],[`attributes=${attributes.join(',')}`],false);
 			}
@@ -714,13 +772,15 @@ let MyGantt = {
 			// target a couple of steps before now for better overview
 			if(this.isHours) secFromStart -= 3600  * 3; // 3 hours
 			if(this.isDays)  secFromStart -= 86400 * 3; // 3 days
+			if(this.isWeeks) secFromStart -= 604800 * 3; // 3 weeks
 			
 			this.$refs.content.scrollLeft = this.pxPerSec * secFromStart;
 		},
 		toggleStepType() {
 			switch(this.stepType) {
 				case 'hours': this.stepType = 'days';  break;
-				case 'days':  this.stepType = 'hours'; break;
+				case 'days':  this.stepType = 'weeks'; break;
+				case 'weeks': this.stepType = 'hours'; break;
 			}
 			this.reloadInside();
 		},
@@ -788,6 +848,9 @@ let MyGantt = {
 			
 			if(this.isDays) // add month as: January, ...
 				return this.capApp['month'+value];
+
+			if(this.isWeeks) // add weeks as: 12, 13, ...
+				return `${value}`;
 		},
 		setSteps(forceReload) {
 			// get count of steps that fit within Gantt content
@@ -811,13 +874,13 @@ let MyGantt = {
 			let d = new Date();
 			
 			// round point in times depending on the gantt step type
-			if(this.isHours || this.isDays) {
+			if(this.isHours || this.isDays || this.isWeeks) {
 				d.setMinutes(0);
 				d.setSeconds(0);
 				d.setMilliseconds(0);
 			}
 			
-			if(this.isDays)
+			if(this.isDays || this.isWeeks)
 				d.setHours(0);
 			
 			return d;

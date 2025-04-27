@@ -117,6 +117,13 @@ var upgradeFunctions = map[string]func(ctx context.Context, tx pgx.Tx) (string, 
 		ALTER TABLE app.column ALTER COLUMN styles TYPE app.column_style[] USING styles::TEXT[]::app.column_style[];
 	*/
 
+	"x.x": func(ctx context.Context, tx pgx.Tx) (string, error) {
+		_, err := tx.Exec(ctx, `
+			-- gantt interval weeks
+			ALTER TYPE app.field_calendar_gantt_steps ADD VALUE 'weeks';
+		`)
+		return "x.x", err
+	},
 	"3.9": func(ctx context.Context, tx pgx.Tx) (string, error) {
 		_, err := tx.Exec(ctx, `
 			-- cleanup from last release

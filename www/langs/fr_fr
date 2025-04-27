@@ -993,6 +993,7 @@
 				"effectField": "Champ",
 				"effectFormAction": "Action",
 				"effectTab": "Onglet",
+				"ganttStepsWeeks": "semaines",
 				"ganttStepsDays": "jours",
 				"ganttStepsHours": "heures",
 				"style": {

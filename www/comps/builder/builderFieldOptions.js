@@ -718,6 +718,7 @@ let MyBuilderFieldOptions = {
 								>
 									<option value="days" >{{ capApp.option.ganttStepsDays }}</option>
 									<option value="hours">{{ capApp.option.ganttStepsHours }}</option>
+									<option value="weeks">{{ capApp.option.ganttStepsWeeks }}</option>
 								</select>
 							</td>
 						</tr>

@@ -993,6 +993,7 @@
 				"effectField": "Field",
 				"effectFormAction": "Action",
 				"effectTab": "Tab",
+				"ganttStepsWeeks": "settimane",
 				"ganttStepsDays": "giorni",
 				"ganttStepsHours": "ore",
 				"style": {

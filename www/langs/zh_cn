@@ -993,6 +993,7 @@
 				"effectField": "字段",
 				"effectFormAction": "Action",
 				"effectTab": "选项卡",
+				"ganttStepsWeeks": "weeks",
 				"ganttStepsDays": "天",
 				"ganttStepsHours": "小时",
 				"style": {
