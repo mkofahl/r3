@@ -387,6 +387,7 @@
 			"noMailsInTraffic": "لا توجد حركة مرور البريد الإلكتروني المسجلة.",
 			"option": {
 				"authMethod": {
+					"none": "NONE",
 					"login": "تسجيل الدخول (O365 SMTP القديم)",
 					"plain": "سهل",
 					"xoauth2": "أوث 2.0"

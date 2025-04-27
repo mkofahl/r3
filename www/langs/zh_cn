@@ -387,6 +387,7 @@
 			"noMailsInTraffic": "无已记录的电子邮件流量。",
 			"option": {
 				"authMethod": {
+					"none": "NONE",
 					"login": "LOGIN（O365 旧版 SMTP）",
 					"plain": "PLAIN",
 					"xoauth2": "OAUTH 2.0"

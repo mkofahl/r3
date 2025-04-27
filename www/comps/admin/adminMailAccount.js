@@ -70,6 +70,7 @@ let MyAdminMailAccount = {
 							<td>{{ capApp.accountAuthMethod }}*</td>
 							<td>
 								<select v-model="inputs.authMethod">
+									<option value="none">{{ capApp.option.authMethod.none }}</option>
 									<option value="plain">{{ capApp.option.authMethod.plain }}</option>
 									<option value="xoauth2">{{ capApp.option.authMethod.xoauth2 }}</option>
 									<option value="login" :disabled="!isSmtp">{{ capApp.option.authMethod.login }}</option>

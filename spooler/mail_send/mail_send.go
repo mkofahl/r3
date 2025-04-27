@@ -232,6 +232,8 @@ func do(m types.Mail) error {
 
 	// apply authentication method
 	switch ma.AuthMethod {
+	case "none":
+		client.SetSMTPAuth(mail.SMTPAuthNoAuth)
 	case "login":
 		client.SetSMTPAuth(mail.SMTPAuthLogin)
 	case "plain":

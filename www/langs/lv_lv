@@ -387,6 +387,7 @@
 			"noMailsInTraffic": "Nav ierakstīta e-pasta satiksmes.",
 			"option": {
 				"authMethod": {
+					"none": "NONE",
 					"login": "LOGIN (priekš O365 legacy SMTP)",
 					"plain": "PLAIN",
 					"xoauth2": "OAUTH 2.0"

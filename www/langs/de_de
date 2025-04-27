@@ -354,6 +354,7 @@
 			"accountAuthMethod": "Authentifizierungsmethode",
 			"accountAuthMethodHintLogin": "Basis-Authentifizierung via Benutzername und Passwort. Kompatibilitätsoption für Legacy-SMTP-Authentifizierung gegenüber Office 365.",
 			"accountAuthMethodHintPlain": "Basis-Authentifizierung via Benutzername und Passwort.",
+			"accountAuthMethodHintNone": "Keine Authentifizierung.",
 			"accountAuthMethodHintXOAuth2": "Authentifizierung über OAuth 2.0, manchmal auch \"Moderne Authentifizierung\" genannt. Wird von einigen Anbietern für den Zugriff auf ihre Dienste benötigt.",
 			"accountHost": "Hostname",
 			"accountMode": "Konnektor",
@@ -387,6 +388,7 @@
 			"noMailsInTraffic": "Kein E-Mail-Verkehr aufgezeichnet.",
 			"option": {
 				"authMethod": {
+					"none": "NONE",
 					"login": "LOGIN (O365 legacy SMTP)",
 					"plain": "PLAIN",
 					"xoauth2": "OAUTH 2.0"

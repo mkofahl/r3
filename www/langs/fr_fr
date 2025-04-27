@@ -387,6 +387,7 @@
 			"noMailsInTraffic": "Aucun trafic de messagerie enregistré.",
 			"option": {
 				"authMethod": {
+					"none": "NONE",
 					"login": "LOGIN (pour O365 legacy SMTP)",
 					"plain": "PLAIN",
 					"xoauth2": "OAUTH 2.0"

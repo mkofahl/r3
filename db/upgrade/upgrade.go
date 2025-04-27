@@ -117,6 +117,13 @@ var upgradeFunctions = map[string]func(ctx context.Context, tx pgx.Tx) (string, 
 		ALTER TABLE app.column ALTER COLUMN styles TYPE app.column_style[] USING styles::TEXT[]::app.column_style[];
 	*/
 
+	"x.x": func(ctx context.Context, tx pgx.Tx) (string, error) {
+		_, err := tx.Exec(ctx, `
+			-- mail account without authentication
+			ALTER TYPE instance.mail_account_auth_method ADD VALUE 'none';
+		`)
+		return "x.x", err
+	},
 	"3.9": func(ctx context.Context, tx pgx.Tx) (string, error) {
 		_, err := tx.Exec(ctx, `
 			-- cleanup from last release
