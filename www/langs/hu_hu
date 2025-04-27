@@ -354,6 +354,7 @@
 			"accountAuthMethod": "Hitelesítési mód",
 			"accountAuthMethodHintLogin": "Basic authentication via username & password. Compatibility option for legacy SMTP authentication against Office 365.",
 			"accountAuthMethodHintPlain": "Basic authentication via username & password.",
+			"accountAuthMethodHintNone": "No authentication.",
 			"accountAuthMethodHintXOAuth2": "Authentication via OAuth 2.0, sometimes called 'Modern Authentication'. Required by some providers to access their services.",
 			"accountHost": "Kiszolgáló",
 			"accountMode": "Connector",

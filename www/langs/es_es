@@ -354,6 +354,7 @@
 			"accountAuthMethod": "Método de autenticación",
 			"accountAuthMethodHintLogin": "Autenticación básica mediante nombre de usuario y contraseña. Opción de compatibilidad para la autenticación SMTP heredada de Office 365.",
 			"accountAuthMethodHintPlain": "Autenticación básica mediante nombre de usuario y contraseña.",
+			"accountAuthMethodHintNone": "No authentication.",
 			"accountAuthMethodHintXOAuth2": "Autenticación mediante OAuth 2.0, a veces llamada 'Autenticación moderna'. Requerida por algunos proveedores para acceder a sus servicios.",
 			"accountHost": "Nombre del host",
 			"accountMode": "Conector",

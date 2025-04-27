@@ -354,6 +354,7 @@
 			"accountAuthMethod": "طريقة المصادقة",
 			"accountAuthMethodHintLogin": "المصادقة الأساسية عبر اسم المستخدم وكلمة المرور. ",
 			"accountAuthMethodHintPlain": "المصادقة الأساسية عبر اسم المستخدم وكلمة المرور.",
+			"accountAuthMethodHintNone": "No authentication.",
 			"accountAuthMethodHintXOAuth2": "المصادقة عبر OAuth 2.0، والتي تسمى أحيانًا \"المصادقة الحديثة\". ",
 			"accountHost": "اسم المضيف",
 			"accountMode": "موصل",
