@@ -43,7 +43,7 @@ func Get_tx(ctx context.Context, tx pgx.Tx, data types.DataGet, loginId int64, q
 	queryArgs := make([]interface{}, 0)  // SQL arguments for data query
 
 	// prepare SQL query for data GET request
-	*query, err = prepareQuery(data, indexRelationIds, &queryArgs, loginId, isDoingRowCount, 0)
+	*query, err = prepareQuery(data, indexRelationIds, &queryArgs, loginId, false, 0)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -62,15 +62,6 @@ func Get_tx(ctx context.Context, tx pgx.Tx, data types.DataGet, loginId int64, q
 		valuesAll, err := rows.Values()
 		if err != nil {
 			return nil, 0, err
-		}
-
-		if isDoingRowCount && len(results) == 0 && len(valuesAll) > 0 && rowColumns[len(rowColumns)-1].Name == sqlAliasTotalRowCount {
-			// get total count from last row value
-			var valid bool
-			resultCountTotal, valid = valuesAll[len(valuesAll)-1].(int64)
-			if !valid {
-				return nil, 0, fmt.Errorf("row count is invalid data type")
-			}
 		}
 
 		indexRecordIds := make(map[int]interface{}) // ID for each relation tuple by index
@@ -111,7 +102,49 @@ func Get_tx(ctx context.Context, tx pgx.Tx, data types.DataGet, loginId int64, q
 
 	if !isDoingRowCount {
 		resultCountTotal = int64(len(results))
+	} else {
+		// restart with new counter
+		queryArgs := make([]interface{}, 0)  // SQL arguments for data query
+
+		// prepare SQL query for data GET request
+		*query, err = prepareQuery(data, indexRelationIds, &queryArgs, loginId, true, 0)
+		if err != nil {
+			return nil, 0, err
+		}
+
+		// execute SQL query
+		rows, err := tx.Query(ctx, *query, queryArgs...)
+		if err != nil {
+			return nil, 0, err
+		}
+
+		rowColumns := rows.FieldDescriptions()
+
+		if rows.Next() {
+			valuesAll, err := rows.Values()
+			if err != nil {
+				return nil, 0, err
+			}
+	
+			if len(valuesAll) == 1 && rowColumns[0].Name == sqlAliasTotalRowCount {
+				// get total count from the only one row value
+				var valid bool
+				resultCountTotal, valid = valuesAll[0].(int64)
+				if !valid {
+					return nil, 0, fmt.Errorf("row count is invalid data type")
+				}
+			}
+		} else {
+			return nil, 0, fmt.Errorf("row count returned no data")
+		}
+	
+		if err := rows.Err(); err != nil {
+			return nil, 0, err
+		}
+		rows.Close()
 	}
+
+
 
 	// resolve relation policy access permissions for retrieved result records
 	// DEL/SET actions only; records not allowed to GET are not retrieved as results
@@ -272,7 +305,7 @@ func Get_tx(ctx context.Context, tx pgx.Tx, data types.DataGet, loginId int64, q
 }
 
 // returns SQL query from data GET request (sub query if nesting level != 0)
-func prepareQuery(data types.DataGet, indexRelationIds map[int]uuid.UUID, queryArgs *[]interface{}, loginId int64, addRowCount bool, nestingLevel int) (string, error) {
+func prepareQuery(data types.DataGet, indexRelationIds map[int]uuid.UUID, queryArgs *[]interface{}, loginId int64, isRowCount bool, nestingLevel int) (string, error) {
 
 	for _, expr := range data.Expressions {
 		if expr.AttributeId.Valid && !authorizedAttribute(loginId, expr.AttributeId.Bytes, types.AccessRead) {
@@ -399,11 +432,6 @@ func prepareQuery(data types.DataGet, indexRelationIds map[int]uuid.UUID, queryA
 		}
 	}
 
-	// add expression for total row count
-	if addRowCount {
-		inSelect = append(inSelect, fmt.Sprintf("COUNT(*) OVER() AS %s", sqlAliasTotalRowCount))
-	}
-
 	// build GROUP BY line
 	queryGroup := ""
 	groupByItems := make([]string, 0)
@@ -468,6 +496,20 @@ func prepareQuery(data types.DataGet, indexRelationIds map[int]uuid.UUID, queryA
 		indent := strings.Repeat("\t", nestingLevel)
 		query = indent + regexp.MustCompile(`\r?\n`).ReplaceAllString(query, "\n"+indent)
 	}
+
+	if isRowCount {
+		query = fmt.Sprintf(
+			`SELECT COUNT(*) AS %s FROM (SELECT %s`+"\n"+
+				`FROM "%s"."%s" AS "%s" %s%s%s) AS _e%s`,
+			sqlAliasTotalRowCount,        // row alias
+			strings.Join(inSelect, `, `), // SELECT
+			mod.Name, rel.Name, relCode,  // FROM
+			strings.Join(inJoin, ""), // JOINS
+			queryWhere,               // WHERE
+			queryGroup,               // GROUP BY
+			sqlAliasTotalRowCount)    // query alias
+	}
+
 	return query, nil
 }
 
