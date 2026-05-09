@@ -36,6 +36,7 @@ const MyBuilderFormStateEffect = {
 			<option value="readonly" :disabled="!isData && !isVariable && !isButton && !isAction">{{ capGen.readonly }}</option>
 			<option value="optional" :disabled="!isData && !isVariable">{{ capGen.optional }}</option>
 			<option value="required" :disabled="!isData && !isVariable">{{ capGen.required }}</option>
+			<option value="disabled">{{ capGen.disabled }}</option>
 		</select>
 		
 		<!-- new data -->

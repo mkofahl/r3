@@ -116,7 +116,7 @@ type Field struct {
 	TabId    pgtype.UUID `json:"tabId"`
 	IconId   pgtype.UUID `json:"iconId"`
 	Content  string      `json:"content"`  // content (button, header, data, list, calendar, chart, tabs)
-	State    string      `json:"state"`    // default state (hidden, default, readonly, optional, required)
+	State    string      `json:"state"`    // default state (hidden, default, readonly, optional, required, disabled)
 	Flags    []string    `json:"flags"`    // flags for field display/behaviour options (clipboard, monospace, alignEnd, ...)
 	OnMobile bool        `json:"onMobile"` // display this field on mobile?
 }
@@ -394,7 +394,7 @@ type FormStateEffect struct {
 	FieldId      pgtype.UUID `json:"fieldId"`      // affected field
 	TabId        pgtype.UUID `json:"tabId"`        // affected tab
 	NewData      int32       `json:"newData"`      // defines data handling via number (CREATE=4, UPDATE=2, DELETE=1, NOTHING=0) for form or data fields (lists, calendars, kanban, etc.)
-	NewState     string      `json:"newState"`     // applied state (hidden, default, readonly, optional, required)
+	NewState     string      `json:"newState"`     // applied state (hidden, default, readonly, optional, required, disabled)
 }
 type Icon struct {
 	Id       uuid.UUID `json:"id"`

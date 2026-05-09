@@ -398,7 +398,7 @@ export default {
 					const state = s.entityIdMapEffect.field[f.id] !== undefined
 						? s.entityIdMapEffect.field[f.id] : f.state;
 					
-					if(state === 'hidden')
+					if(state === 'hidden' || state === 'disabled')
 						continue;
 
 					switch(f.content) {

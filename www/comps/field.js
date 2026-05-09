@@ -123,6 +123,7 @@ export default {
 					:indexDate0="field.indexDate0"
 					:indexDate1="field.indexDate1"
 					:isHidden
+					:isDisabled
 					:isSingleField="isAlone"
 					:loadWhileHidden="parentIsCounting"
 					:loginOptions
@@ -159,6 +160,7 @@ export default {
 					:indexDate0="field.indexDate0"
 					:indexDate1="field.indexDate1"
 					:isHidden
+					:isDisabled
 					:isSingleField="isAlone"
 					:loginOptions
 					:moduleId
@@ -192,6 +194,7 @@ export default {
 					:hasOpenForm="field.openForm !== null"
 					:iconId="iconId ? iconId : null"
 					:isHidden
+					:isDisabled
 					:isSingleField="isAlone"
 					:loadWhileHidden="parentIsCounting"
 					:loginOptions
@@ -212,6 +215,7 @@ export default {
 					:filters
 					:formLoading
 					:isHidden
+					:isDisabled
 					:limit="query.fixedLimit"
 					:loginOptions
 					:moduleId
@@ -251,6 +255,7 @@ export default {
 					:hasOpenForm="field.openForm !== null"
 					:hasOpenFormBulk="field.openFormBulk !== null"
 					:isHidden
+					:isDisabled
 					:isSingleField="isAlone"
 					:layoutDefault="field.layout"
 					:limitDefault="query.fixedLimit === 0 ? field.resultLimit : query.fixedLimit"
@@ -330,6 +335,7 @@ export default {
 							:moduleId
 							:parentIsCounting="t.contentCounter && !tabIndexesHidden.includes(i)"
 							:parentIsHidden="isHidden || i !== tabIndexShow"
+							:parentIsDisabled="isDisabled || i !== tabIndexShow"
 							:values="values"
 							:variableIdMapLocal
 						/>
@@ -366,6 +372,7 @@ export default {
 					:formLoading="formLoading"
 					:hideInputs="field.flags.includes('hideInputs')"
 					:isHidden="isHidden"
+					:isDisabled="isDisabled"
 					:monospace="isMonospace"
 					:readonly="isReadonly"
 				>
@@ -458,6 +465,7 @@ export default {
 					:attributeIdFile="field.attributeIdAlt"
 					:clipboard="isClipboard"
 					:isHidden="isHidden"
+					:isDisabled="isDisabled"
 					:printCaption="caption"
 					:readonly="isReadonly"
 					:valueFiles="valueAlt"
@@ -524,6 +532,7 @@ export default {
 					:formLoading="formLoading"
 					:hideInputs="field.flags.includes('hideInputs')"
 					:isHidden="isHidden"
+					:isDisabled="isDisabled"
 					:readonly="isReadonly"
 				>
 					<template #input-icon>
@@ -551,6 +560,7 @@ export default {
 					:fieldId="field.id"
 					:formLoading
 					:isHidden
+					:isDisabled
 					:loginOptions
 					:readonly="isReadonly"
 					:recordId="joinsIndexMap[field.index].recordId"
@@ -686,6 +696,7 @@ export default {
 			:moduleId
 			:parentIsCounting
 			:parentIsHidden="isHidden"
+			:parentIsDisabled="isDisabled"
 			:values
 			:variableIdMapLocal
 		/>
@@ -713,6 +724,7 @@ export default {
 		moduleId:           { type:String,  required:true },
 		parentIsCounting:   { type:Boolean, required:false, default:false }, // field parent is counting records (tab counter)
 		parentIsHidden:     { type:Boolean, required:false, default:false }, // field parent has its content hidden (tab/container)
+		parentIsDisabled:   { type:Boolean, required:false, default:false }, // field parent has its content disabled (tab/container)
 		values:             { type:Object,  required:true },
 		variableIdMapLocal: { type:Object,  required:true }                  // variable values by ID (variables assigned to form)
 	},
@@ -821,6 +833,7 @@ export default {
 		domClass:(s) => {
 			let out = [];
 			if(s.isHidden)   out.push('hidden');
+			if(s.isDisabled) out.push('hidden');
 			if(s.isIframe)   out.push('iframe');
 			if(s.isReadonly) out.push('readonly');
 			if(s.isRichtext) out.push('richtext');
@@ -905,6 +918,7 @@ export default {
 			// optional: data or variable field, input is optional
 			// required: data or variable field, input is required
 			// readonly: data, button or variable field, input is readonly
+			// disabled: field is permanently not shown
 			let state = s.field.state;
 			
 			// apply form state if available
@@ -924,7 +938,7 @@ export default {
 			}
 
 			// readonly overwrite for 'visible' states
-			if(state !== 'hidden' && (s.logViewer || (s.formBlockInputs && (s.isData || s.isButton || s.isVariable))))
+			if((state !== 'hidden' || state !== 'disabled') && (s.logViewer || (s.formBlockInputs && (s.isData || s.isButton || s.isVariable))))
 				state = 'readonly';
 
 			return state;
@@ -937,7 +951,7 @@ export default {
 				let state = s.entityIdMapEffect.tab[t.id]?.state !== undefined
 					? s.entityIdMapEffect.tab[t.id].state : t.state;
 				
-				if(state === 'hidden')
+				if(state === 'hidden' || state === 'disabled')
 					out.push(i);
 			}
 			return out;
@@ -1148,6 +1162,7 @@ export default {
 		isFiles:         (s) => s.isData && s.isAttributeFiles(s.contentData),
 		isHeader:        (s) => s.content === 'header',
 		isHidden:        (s) => s.stateFinal === 'hidden' || s.parentIsHidden,
+		isDisabled:      (s) => s.stateFinal === 'disabled' || s.parentIsDisabled,
 		isIframe:        (s) => s.isData && s.contentUse === 'iframe',
 		isInteger:       (s) => s.isData && s.isAttributeInteger(s.contentData),
 		isKanban:        (s) => s.content === 'kanban',

@@ -864,6 +864,7 @@ CREATE TYPE app.role_content AS ENUM (
 CREATE TYPE app.state_effect AS ENUM (
 	'default',
 	'hidden',
+	'disabled',
 	'readonly',
 	'required',
 	'optional'

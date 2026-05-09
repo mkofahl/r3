@@ -338,6 +338,7 @@ export default {
 							<option v-if="isData" value="optional">{{ capGen.optional }}</option>
 							<option v-if="isData" value="required">{{ capGen.required }}</option>
 							<option v-if="isData || isButton" value="readonly">{{ capGen.readonly }}</option>
+							<option value="disabled">{{ capGen.disabled }}</option>
 						</select>
 					</td>
 				</tr>
@@ -1069,6 +1070,7 @@ export default {
 													>
 														<option value="hidden">{{ capGen.hidden }}</option>
 														<option value="default">{{ capGen.default }}</option>
+														<option value="disabled">{{ capGen.disabled }}</option>
 													</select>
 												</td>
 												<td>
