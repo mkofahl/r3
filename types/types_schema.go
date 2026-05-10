@@ -116,7 +116,7 @@ type Field struct {
 	TabId    pgtype.UUID `json:"tabId"`
 	IconId   pgtype.UUID `json:"iconId"`
 	Content  string      `json:"content"`  // content (button, header, data, list, calendar, chart, tabs)
-	State    string      `json:"state"`    // default state (hidden, default, readonly, optional, required)
+	State    string      `json:"state"`    // default state (hidden, default, readonly, optional, required, disabled)
 	Flags    []string    `json:"flags"`    // flags for field display/behaviour options (clipboard, monospace, alignEnd, ...)
 	OnMobile bool        `json:"onMobile"` // display this field on mobile?
 }
