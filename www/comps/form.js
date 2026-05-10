@@ -1630,7 +1630,18 @@ export default {
 			let expressions = [];
 			for(let ia in this.values) {
 				const d = this.getDetailsFromIndexAttributeId(ia);
-				expressions.push({
+				let doQueryAttr = true;
+
+				// do not query attributeId which is disabled by form state
+				// applies only to direct configured fields, disaled parents are not matched
+				for (let fieldId in this.fieldIdMapData) {
+					if ( d.attributeId === this.fieldIdMapData[fieldId].attributeId ) {
+						doQueryAttr = !( fieldId in this.entityIdMapEffect.field && 'disabled' === this.entityIdMapEffect.field[fieldId].state );
+						break;
+					}
+				}
+
+				doQueryAttr && expressions.push({
 					attributeId:d.attributeId,
 					attributeIdNm:d.attributeIdNm,
 					index:d.index,

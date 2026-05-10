@@ -94,13 +94,6 @@ export default {
 				:title="capApp.hidden"
 			/>
 			
-			<!-- display: field is disabled -->
-			<img class="action clickable" src="images/remove.png"
-				v-if="!isTemplate && !moveActive && field.state === 'disabled' && !readonly"
-				@click="$emit('field-property-set','state','default')"
-				:title="capApp.hidden"
-			/>
-
 			<!-- action: move this field -->
 			<img class="action mover"
 				v-if="!noMovement && (!moveActive || fieldMoveList[fieldMoveIndex].id === field.id || !isTemplate) && !readonly"
