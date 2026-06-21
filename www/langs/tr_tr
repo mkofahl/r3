@@ -2825,6 +2825,7 @@
 		"inputHintRemove": "Kaydı kaldır",
 		"inputPlaceholderAdd": "...daha fazlasını ekle",
 		"message": {
+			"filterExceed": "Warning! Only 1000 of {COUNT} filter options are displayed.",
 			"csvExport": "CSV dışa aktarımı filtreleri ve geçerli listeden sıralamayı kullanır.",
 			"csvImport": "CSV içe aktarma işlemi, aşağıda gösterilen listeden {COUNT} alanlarının her satır için aynı sırada olmasını gerektirir.",
 			"csvImportSuccess": "{COUNT} satırları içe aktarıldı",

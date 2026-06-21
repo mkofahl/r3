@@ -2825,6 +2825,7 @@
 		"inputHintRemove": "Ștergeți înregistrarea",
 		"inputPlaceholderAdd": "...adăuga mai mult",
 		"message": {
+			"filterExceed": "Warning! Only 1000 of {COUNT} filter options are displayed.",
 			"csvExport": "Exportul CSV folosește filtre și ordonarea din lista curentă.",
 			"csvImport": "Importul CSV necesită {COUNT} câmpuri din lista de mai jos, în aceeași ordine pentru fiecare rând.",
 			"csvImportSuccess": "Au fost importate {COUNT} linii",

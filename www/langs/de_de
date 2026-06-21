@@ -2825,6 +2825,7 @@
 		"inputHintRemove": "Datensatz entfernen",
 		"inputPlaceholderAdd": "...weitere hinzufügen",
 		"message": {
+			"filterExceed": "Achtung! Es werden nur 1000 von {COUNT} Filtermöglichkeiten angezeigt.",
 			"csvExport": "Der CSV-Export verwendet Filter und Sortierung der aktuellen Liste.",
 			"csvImport": "Der CSV-Import erfordert die {COUNT} Feld(er) der unten angezeigten Liste für jede Zeile und in der gleichen Reihenfolge.",
 			"csvImportSuccess": "{COUNT} Zeilen wurden importiert",

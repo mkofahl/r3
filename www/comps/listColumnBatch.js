@@ -117,6 +117,9 @@ export default {
 							:naked="true"
 						/>
 					</div>
+					<div class="columnBatchOptionItem" v-if="showFilterWarning">
+						{{ capApp.message.filterExceed.replace('{COUNT}',valuesTotalCount) }}
+					</div>
 				</template>
 				
 				<!-- filter actions -->
@@ -156,6 +159,7 @@ export default {
 			inputSel:[], // value input for selection filter
 			inputTxt:'', // value input for text filter
 			values:[],   // values available to filter with (all values a list could have for column)
+			valuesTotalCount:0, // total number of distinct values in filter column, may exceed values shown in filter
 			zeroSelection:false
 		};
 	},
@@ -245,6 +249,7 @@ export default {
 		showFilterAny:    s => s.showFilterItems || s.showFilterText,
 		showFilterItems:  s => s.values.length != 0,
 		showFilterText:   s => !s.isDateOrTime && s.isValidFilter,
+		showFilterWarning:s => s.valuesTotalCount > 1000,
 		showIconFilter:   s => s.isValidFilter && s.isFiltered,
 		showIconOrder:    s => s.isOrdered && !s.isOrderedOrginal,
 		
@@ -384,6 +389,7 @@ export default {
 			ws.send('data','get',this.prepareDataGet(),false).then(
 				res => {
 					this.values = [];
+					this.valuesTotalCount = res.payload.count;
 					for(const row of res.payload.rows) {
 						this.values.push(row.values[0]);
 					}

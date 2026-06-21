@@ -2825,6 +2825,7 @@
 		"inputHintRemove": "移除记录",
 		"inputPlaceholderAdd": "…添加更多",
 		"message": {
+			"filterExceed": "Warning! Only 1000 of {COUNT} filter options are displayed.",
 			"csvExport": "CSV 导出使用当前列表的过滤器和排序。",
 			"csvImport": "CSV 导入需要以下列表中所示的 {COUNT} 个字段，并且每行的顺序相同。",
 			"csvImportSuccess": "已导入 {COUNT} 行",

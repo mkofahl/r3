@@ -2825,6 +2825,7 @@
 		"inputHintRemove": "Adatsor eltávolítása",
 		"inputPlaceholderAdd": "...további hozzáadása",
 		"message": {
+			"filterExceed": "Warning! Only 1000 of {COUNT} filter options are displayed.",
 			"csvExport": "A CSV export a jelenlegi lista szűrését és rendezését használja.",
 			"csvImport": "A CSV importáláshoz a(z) {COUNT} mezőre van szükség minden sorban a lenti listában, ugyanabban a sorrendben.",
 			"csvImportSuccess": "{COUNT} sor importálva lett",

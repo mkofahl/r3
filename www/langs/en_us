@@ -2825,6 +2825,7 @@
 		"inputHintRemove": "Remove record",
 		"inputPlaceholderAdd": "...add more",
 		"message": {
+			"filterExceed": "Warning! Only 1000 of {COUNT} filter options are displayed.",
 			"csvExport": "The CSV export uses filters and ordering from the current list.",
 			"csvImport": "The CSV import requires the {COUNT} field(s) from the list shown below, in the same order for each row.",
 			"csvImportSuccess": "{COUNT} lines were imported",

@@ -2825,6 +2825,7 @@
 		"inputHintRemove": "Eliminar registro",
 		"inputPlaceholderAdd": "...agregar más",
 		"message": {
+			"filterExceed": "Warning! Only 1000 of {COUNT} filter options are displayed.",
 			"csvExport": "La exportación CSV utiliza filtros y ordenación de la lista actual.",
 			"csvImport": "La importación CSV requiere el/los campo(s) {COUNT} de la lista mostrada a continuación, en el mismo orden para cada fila.",
 			"csvImportSuccess": "Se importaron {COUNT} líneas",

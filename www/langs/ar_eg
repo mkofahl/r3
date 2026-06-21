@@ -2825,6 +2825,7 @@
 		"inputHintRemove": "إزالة السجل",
 		"inputPlaceholderAdd": "...أضف المزيد",
 		"message": {
+			"filterExceed": "Warning! Only 1000 of {COUNT} filter options are displayed.",
 			"csvExport": "يستخدم تصدير CSV عوامل التصفية والترتيب من القائمة الحالية.",
 			"csvImport": "يتطلب استيراد ملف CSV وجود {COUNT} حقل (حقول) من القائمة الموضحة أدناه، بنفس الترتيب لكل صف.",
 			"csvImportSuccess": "تم استيراد {COUNT} من الأسطر",
