@@ -101,19 +101,27 @@ export default {
 				
 				<!-- filter by items -->
 				<template v-if="showFilterItems">
+					<div class="columnBatchOptionItem">
 					<my-button
 						@trigger="valueToggleAll"
-						:caption="'['+capGen.button.selectAll+']'"
-						:image="(inputSel.length === 0 || inputSel.length === values.length) && !zeroSelection ? 'checkbox1.png' : 'checkbox0.png'"
+						:caption="inputSel.length === values.length ? '['+capGen.button.selectNone+']' : '['+capGen.button.selectAll+']'"
+						:image="inputSel.length === values.length ? 'checkbox1.png' : 'checkbox0.png'"
 						:naked="true"
 					/>
+					<my-button
+						@trigger="filterModeExclude = !filterModeExclude; $emit('set-filter-mode',filterModeExclude); this.set()"
+						:image="filterModeExclude ? 'exclude.png' : 'include.png'"
+						:caption="filterModeExclude ? '['+capGen.button.include+']' : '['+capGen.button.exclude+']'"
+						:naked="true"
+					/>
+					</div>
 					<div class="columnBatchOptionFilterValues">
 						<my-button
 							v-for="v of values"
 							@trigger="valueToggle(v)"
 							:adjusts="true"
 							:caption="displayValue(v)"
-							:image="(inputSel.length === 0 || !inputSel.includes(v)) && !zeroSelection ? 'checkbox1.png' : 'checkbox0.png'"
+							:image="inputSel.includes(v) ? 'checkbox1.png' : 'checkbox0.png'"
 							:naked="true"
 						/>
 					</div>
@@ -150,13 +158,14 @@ export default {
 		rowCount:        { type:Number,  required:true }, // list total row count
 		simpleSortOnly:  { type:Boolean, required:true }  // list column can only sort, does not dropdown or offer any other option
 	},
-	emits:['del-aggregator','del-order','set-aggregator','set-filters','set-order','set-order-only'],
+	emits:['del-aggregator','del-order','set-aggregator','set-filters','set-order','set-order-only','set-filter-mode'],
 	data() {
 		return {
 			inputSel:[], // value input for selection filter
 			inputTxt:'', // value input for text filter
 			values:[],   // values available to filter with (all values a list could have for column)
-			zeroSelection:false
+			valuesTotalCount:0, // total number of distinct values in filter column, may exceed values shown in filter
+			filterModeExclude:true
 		};
 	},
 	watch:{
@@ -171,7 +180,7 @@ export default {
 					switch(f.operator) {
 						case 'ILIKE':  this.inputTxt = f.side1.value;                             break;
 						case '<> ALL': this.inputSel = JSON.parse(JSON.stringify(f.side1.value)); break;
-						case '= ANY':  this.migrateFilter(f.side1.value);                         break;
+						case '= ANY':  this.inputSel = JSON.parse(JSON.stringify(f.side1.value)); break;
 					}
 				}
 
@@ -332,50 +341,28 @@ export default {
 		},
 		useTextInput() {
 			this.inputSel = [];
-			this.zeroSelection = false;
 			this.set();
 		},
 		valueToggle(v) {
 			this.inputTxt = '';
 
-			if(this.zeroSelection && this.inputSel.length === 0)
-				this.inputSel = JSON.parse(JSON.stringify(this.values));
-			
 			const p = this.inputSel.indexOf(v);
 			if(p !== -1) this.inputSel.splice(p,1);
 			else         this.inputSel.push(v);
 
-			this.zeroSelection = false;
 			this.set();
 		},
 		valueToggleAll() {
 			this.inputTxt = '';
-			if(this.inputSel.length !== 0 || this.zeroSelection) {
-				this.zeroSelection = false;
+			if(this.inputSel.length === this.values.length) {
 				this.inputSel = [];
 			}
 			else {
-				this.zeroSelection = true;
+				this.inputSel = JSON.parse(JSON.stringify(this.values));
 			}
 			this.set();
 		},
 
-		// migrate filter (< r3.10.3) from outdated '= ANY' filter to current '<> ALL' filter
-		migrateFilter(valuesIncl) {
-			ws.send('data','get',this.prepareDataGet(),false).then(
-				res => {
-					// exclude any value that is not in outdated inclusion filter
-					this.inputSel = [];
-					for(const row of res.payload.rows) {
-						if(!valuesIncl.includes(row.values[0]))
-							this.inputSel.push(row.values[0]);
-					}
-					this.set();
-				},
-				this.$root.genericError
-			);
-		},
-		
 		// retrieval
 		loadSelectionValues() {
 			if(!this.dropdownShow || !this.isValidFilter)
@@ -384,6 +371,7 @@ export default {
 			ws.send('data','get',this.prepareDataGet(),false).then(
 				res => {
 					this.values = [];
+					this.valuesTotalCount = res.payload.count;
 					for(const row of res.payload.rows) {
 						this.values.push(row.values[0]);
 					}
@@ -405,15 +393,21 @@ export default {
 			let filters = JSON.parse(JSON.stringify(this.filtersColumn))
 				.filter((v,i) => !this.columnFilterIndexes.includes(i));
 
-			if(this.inputTxt !== '' || this.inputSel.length !== 0) {
+			// skip filter if both, no string is set and if item filter distinguishes from selecting all
+			let doFilter = this.inputTxt !== '';
+			doFilter ||= (this.filterModeExclude && this.inputSel.length !== 0 && this.values.length !== 0);
+			doFilter ||= (!this.filterModeExclude && this.inputSel.length !== this.values.length && this.valuesTotalCount <= 1000);
+			doFilter ||= (!this.filterModeExclude && this.valuesTotalCount > 1000);
+			if(doFilter) {
 				// add new filters for this column, if active
 				// NULL values are not allowed in '<> ALL' operator, will make entire set NULL if included
 				// remove NULL from original filter condition but add second NULL/NOT NULL condition to filter with it
 				const exclNull = !filterTxt && this.inputSel.includes(null);
+				const filterMode = this.filterModeExclude ? '<> ALL' : '= ANY';
 				filters.push({
 					connector:'AND',
 					index:0,
-					operator:filterTxt ? 'ILIKE' : '<> ALL',
+					operator:filterTxt ? 'ILIKE' : filterMode,
 					side0:{
 						attributeId:atrId,
 						attributeIndex:atrIndex,
