@@ -32,7 +32,7 @@ export default {
 		<div class="columBatchHeaderCaption"
 			v-click-outside="clickOutside"
 			@click.stop="click"
-			:class="{ clickable:canOpen, dropdownActive:dropdownShow, hasIcons:showIconFilter || showIconOrder }"
+			:class="{ alignEnd:alignEnd, alignMid:alignMid, clickable:canOpen, dropdownActive:dropdownShow, hasIcons:showIconFilter || showIconOrder }"
 			:title="columnBatch.caption"
 		>{{ columnBatch.caption }}</div>
 
@@ -237,6 +237,8 @@ export default {
 		},
 
 		// simple
+		alignEnd:         s => s.columnUsedFilter && s.columnUsedFilter.flags && s.columnUsedFilter.flags.alignEnd,
+		alignMid:         s => s.columnUsedFilter && s.columnUsedFilter.flags && s.columnUsedFilter.flags.alignMid,
 		aggrColumn:       s => s.getFirstColumnUsableAsAggregator(s.columnBatch,s.columns),
 		canOpen:          s => s.rowCount > 1 || s.isFiltered,
 		canOrder:         s => s.columnBatch.columnIndexesSortBy.length !== 0,
