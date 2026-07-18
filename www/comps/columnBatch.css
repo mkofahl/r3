@@ -45,6 +45,12 @@
 	white-space:nowrap;
 	overflow:hidden;
 }
+.columBatchHeaderCaption.alignEnd{
+	text-align:right;
+}
+.columBatchHeaderCaption.alignMid{
+	text-align:center;
+}
 .columBatchHeaderCaption.dropdownActive{
 	font-weight:bold;
 }
