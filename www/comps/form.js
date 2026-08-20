@@ -583,6 +583,12 @@ export default {
 				block_inputs: (v) => s.blockInputs = v,
 				call_frontend:(id,...args) => s.jsFunctionRun(id,args,s.exposedFunctions),
 				get_record_id:(relationIndex) => {
+					// instead of the index, a relation uuid may be given
+					if(isNaN(relationIndex)) {
+						let index = Object.keys(s.joinsIndexMap).find(i => s.joinsIndexMap[i].relationId === relationIndex);
+						if(index !== undefined)
+							relationIndex = index;
+					}
 					// bulk forms do not retrieve record values, only base record IDs are available
 					if(s.isBulkUpdate && relationIndex === 0)
 						return s.recordIds;

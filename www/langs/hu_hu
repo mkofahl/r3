@@ -1214,7 +1214,7 @@
 					"preset_id STRING"
 				],
 				"get_record_id": [
-					"relation_index NUMBER"
+					"relation_index NUMBER || UUID"
 				],
 				"global_search_start": [
 					"search_input TEXT"
