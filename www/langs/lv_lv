@@ -148,6 +148,7 @@
 			"bindUserDn": "Sasaistīt lietotāja DN",
 			"bindUserDnHint": "Piemērs: CN=readonly,OU=Lietotājs,DC=manafirma,DC=locale",
 			"bindUserPw": "Sasaistīt lietotāja parole",
+			"bindUserPwHint": "(fill only to update)",
 			"button": {
 				"import": "Import users now",
 				"new": "Pievienot savienojumu",

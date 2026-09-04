@@ -117,7 +117,7 @@ export default {
 						</tr>
 						<tr>
 							<td>{{ capApp.bindUserPw }}</td>
-							<td><input v-model="inputs.bindUserPw" type="password" /></td>
+							<td><input v-model="inputs.bindUserPw" type="password" :placeholder="capApp.bindUserPwHint" /></td>
 						</tr>
 						<tr>
 							<td>{{ capApp.searchDn }}</td>

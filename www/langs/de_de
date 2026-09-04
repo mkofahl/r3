@@ -148,6 +148,7 @@
 			"bindUserDn": "Benutzer-DN für Verbindung",
 			"bindUserDnHint": "Beispiel: CN=readonly,OU=User,DC=mycompany,DC=local",
 			"bindUserPw": "Benutzer-Passwort für Verbindung",
+			"bindUserPwHint": "(nur zum Aktualisieren ausfüllen)",
 			"button": {
 				"import": "Benutzer jetzt importieren",
 				"new": "Verbindung hinzufügen",

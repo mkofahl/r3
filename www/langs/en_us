@@ -148,6 +148,7 @@
 			"bindUserDn": "Bind user DN",
 			"bindUserDnHint": "Example: CN=readonly,OU=User,DC=mycompany,DC=local",
 			"bindUserPw": "Bind user password",
+			"bindUserPwHint": "(fill only to update)",
 			"button": {
 				"import": "Import users now",
 				"new": "Add connection",

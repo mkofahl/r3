@@ -148,6 +148,7 @@
 			"bindUserDn": "Associa utente DN",
 			"bindUserDnHint": "Esempio: CN=sola lettura,OU=Utente,DC=miaazienda,DC=locale",
 			"bindUserPw": "Associa password utente",
+			"bindUserPwHint": "(fill only to update)",
 			"button": {
 				"import": "Import users now",
 				"new": "Aggiungi connessione",

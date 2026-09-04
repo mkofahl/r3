@@ -148,6 +148,7 @@
 			"bindUserDn": "DN del usuario de enlace",
 			"bindUserDnHint": "Ejemplo: CN=readonly,OU=User,DC=mycompany,DC=local",
 			"bindUserPw": "Contraseña del usuario de enlace",
+			"bindUserPwHint": "(fill only to update)",
 			"button": {
 				"import": "Importar usuarios ahora",
 				"new": "Agregar conexión",

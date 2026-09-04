@@ -148,6 +148,7 @@
 			"bindUserDn": "绑定用户 DN",
 			"bindUserDnHint": "示例：CN=readonly,OU=User,DC=mycompany,DC=local",
 			"bindUserPw": "绑定用户密码",
+			"bindUserPwHint": "(fill only to update)",
 			"button": {
 				"import": "Import users now",
 				"new": "添加连接",

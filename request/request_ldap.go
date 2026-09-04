@@ -21,7 +21,13 @@ func LdapDel_tx(ctx context.Context, tx pgx.Tx, reqJson json.RawMessage) (any, e
 }
 
 func LdapGet_tx(ctx context.Context, tx pgx.Tx) (any, error) {
-	return ldap.Get_tx(ctx, tx)
+	// don't expose stored ldap bind password
+	ldaps, err := ldap.Get_tx(ctx, tx)
+	for i := range ldaps {
+		ldaps[i].BindUserPw = ""
+	}
+
+	return ldaps, err
 }
 
 func LdapSet_tx(ctx context.Context, tx pgx.Tx, reqJson json.RawMessage) (any, error) {
@@ -29,6 +35,18 @@ func LdapSet_tx(ctx context.Context, tx pgx.Tx, reqJson json.RawMessage) (any, e
 	if err := json.Unmarshal(reqJson, &req); err != nil {
 		return nil, err
 	}
+
+	// if not set in request, restore current bind password
+	if(req.BindUserPw == "") {
+		ldaps, _ := ldap.Get_tx(ctx, tx)
+		for i := range ldaps {
+			if(ldaps[i].Id == req.Id) {
+				req.BindUserPw = ldaps[i].BindUserPw
+				break
+			}
+		}
+	}
+
 	return nil, ldap.Set_tx(ctx, tx, req)
 }
 

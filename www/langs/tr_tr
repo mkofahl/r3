@@ -148,6 +148,7 @@
 			"bindUserDn": "Kullanıcı DN'sini bağla",
 			"bindUserDnHint": "Örnek: CN=salt okunur,OU=Kullanıcı,DC=şirketim,DC=yerel",
 			"bindUserPw": "Kullanıcı şifresini bağla",
+			"bindUserPwHint": "(fill only to update)",
 			"button": {
 				"import": "Kullanıcıları şimdi içe aktarın",
 				"new": "Bağlantı ekle",

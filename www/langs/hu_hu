@@ -148,6 +148,7 @@
 			"bindUserDn": "Felhasználó DN kötéshez",
 			"bindUserDnHint": "Példa: CN=readonly,OU=User,DC=mycompany,DC=local",
 			"bindUserPw": "Felhasználó jelszava kötéshez",
+			"bindUserPwHint": "(fill only to update)",
 			"button": {
 				"import": "Import users now",
 				"new": "Kapcsolat hozzáadása",

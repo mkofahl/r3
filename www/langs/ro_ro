@@ -148,6 +148,7 @@
 			"bindUserDn": "Fixați utilizatorul DN",
 			"bindUserDnHint": "Exemplu: CN=readonly,OU=User,DC=mycompany,DC=local",
 			"bindUserPw": "Fixați parola utilizatorului",
+			"bindUserPwHint": "(fill only to update)",
 			"button": {
 				"import": "Import users now",
 				"new": "Adăugați conexiune",

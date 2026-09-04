@@ -148,6 +148,7 @@
 			"bindUserDn": "ربط الاسم المميز للمستخدم",
 			"bindUserDnHint": "على سبيل المثال: CN=للقراءة فقط،OU=المستخدم،DC=mycompany،DC=محلي",
 			"bindUserPw": "ربط كلمة مرور المستخدم",
+			"bindUserPwHint": "(fill only to update)",
 			"button": {
 				"import": "استيراد تسجيلات الدخول الآن",
 				"new": "إضافة اتصال",

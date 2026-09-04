@@ -148,6 +148,7 @@
 			"bindUserDn": "Lier le DN de l'utilisateur",
 			"bindUserDnHint": "Exemple : CN=readonly,OU=Utilisateur,DC=masociete,DC=local",
 			"bindUserPw": "Mot de passe de l'utilisateur lié",
+			"bindUserPwHint": "(fill only to update)",
 			"button": {
 				"import": "Importer les connexions maintenant",
 				"new": "Ajouter une connexion",

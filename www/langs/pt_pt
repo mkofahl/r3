@@ -148,6 +148,7 @@
 			"bindUserDn": "DN do utilizador de ligação",
 			"bindUserDnHint": "Exemplo: CN=readonly,OU=User,DC=mycompany,DC=local",
 			"bindUserPw": "Palavra-passe do utilizador de ligação",
+			"bindUserPwHint": "(fill only to update)",
 			"button": {
 				"import": "Importar utilizadores agora",
 				"new": "Adicionar ligação",
